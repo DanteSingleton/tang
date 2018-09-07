@@ -3,7 +3,10 @@
   "version": "0.1.3",
   "description": "Tang is an Object Modeler built on top of Joi",
   "main": "./index.js",
-  "scripts": {
+  "types": "dist/index.d.ts",
+  "scripts": {    
+    "prepare": "npm run build",
+    "build": "tsc",
     "test": "nyc --reporter=html --reporter=text mocha",
     "test-only": "mocha",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
@@ -19,16 +22,17 @@
     "microtime": "^2.1.8"
   },
   "devDependencies": {
-    "@types/microtime": "^2.1.0",
     "@types/colors": "^1.2.1",
     "@types/joi": "^13.4.4",
     "@types/lodash": "^4.14.116",
+    "@types/microtime": "^2.1.0",
     "@types/node": "^10.9.3",
     "chai": "^4.1.2",
     "coveralls": "^3.0.2",
     "istanbul": "^1.1.0-alpha.1",
     "mocha": "^5.2.0",
     "nyc": "^13.0.1",
+    "typescript": "^3.0.3",
     "vuepress": "^0.14.2"
   },
   "directories": {

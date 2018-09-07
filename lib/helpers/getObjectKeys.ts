@@ -1,4 +1,4 @@
-function getObjectKeys(data, keys = [], prefix = '') {
+export default function getObjectKeys(data: any, keys: any[] = [], prefix = '') {
   for (let key in data) {
     if (typeof data[key] === 'object' && !data[key].type) {
       let k = getObjectKeys(data[key], [], key)
@@ -13,5 +13,3 @@ function getObjectKeys(data, keys = [], prefix = '') {
   }
   return keys
 }
-
-module.exports = getObjectKeys

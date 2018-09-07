@@ -1,24 +1,40 @@
 const Joi = require('joi')
-// const getObjectKeys = require('./helpers/getObjectKeys')
-const JSONstringify = require('./helpers/jsonStringify')
+import { JSONStringify } from './helpers/JSONStringify';
 require('colors')
-
-const props = 'statics methods computed'.split(' ')
-
-class Schema {
-  constructor(json, options = {}) {
+interface SchemaStatics {
+  [index: string]: Function
+}
+interface SchemaComputed {
+  [index: string]: Function
+}
+interface JoiSchema {
+  [index: string]: any
+}
+interface DefaultValue {
+  [index: string]: any
+}
+interface SchemaMethods {
+  [index: string]: Function
+}
+export class Schema {
+  isSchema: boolean;
+  _json: any;
+  _options: {};
+  _joi: any;
+  _defaultValues: any;
+  statics: SchemaStatics;
+  methods: SchemaMethods;
+  computed: SchemaComputed;
+  static Types: {
+    String: StringConstructor; Number: NumberConstructor; Boolean: BooleanConstructor; Object: ObjectConstructor; Array: ArrayConstructor; Date: DateConstructor; RegExp: RegExpConstructor; Id: any; // TODO: Do something here, not sure what
+    Any: any; Mixed: any;
+  };
+  constructor(json: object, options: object = {}) {
     this.isSchema = true
 
     if (!json || (typeof json !== 'object' && !Object.keys(json).length)) {
       throw new Error('Schema expects object with at least one key/value pair')
     }
-    
-    for (let i = 0; i < props.length; i++) {
-      let prop = props[i]
-      this[prop] = json[prop] || {}
-      delete json[prop]
-    }
-
     this._json = json
     this._options = options
     this._joi = this._parse(json)
@@ -29,11 +45,15 @@ class Schema {
         presence: 'optional',
         noDefaults: false
       },
-      (err, value) => {
+      (err: any, value: any) => {
         this._defaultValues = value
       }
     )
     // this._schemaKeys = getObjectKeys(json)
+
+    this.statics = {}
+    this.methods = {}
+    this.computed = {}
   }
 
   get options() {
@@ -56,11 +76,11 @@ class Schema {
     return this._defaultValues
   }
 
-  validate(data, options) {
+  validate(data: any, options: object) {
     return this._joi.validate(data, options)
   }
 
-  _parse(data) {
+  async _parse(data: any): Promise<any> {
     // check if there is a schema, if so this is a reference to a model
     if (data.schema) {
       return data.schema.joi
@@ -77,20 +97,20 @@ class Schema {
     try {
       joiType = Joi[type]()
     } catch (e) {
-      let t = JSONstringify(type)
+      let t = JSONStringify(type)
       throw new Error(`Joi does not support the type ${t}`)
     }
 
     if (type === 'object') {
       // if the type is an object then loop through and get child schemas
-      let schema = {}
+      let schema: JoiSchema = {}
 
       for (let prop in data) {
         if (data.hasOwnProperty(prop)) {
           schema[prop] = this._parse(data[prop])
           // do not parse array attributes
           if (data[prop].type) {
-            this._parseAttrs(prop, schema[prop], data, val => {
+            this._parseAttrs(prop, schema[prop], data, (val: any) => {
               schema[prop] = val
             })
           }
@@ -101,7 +121,7 @@ class Schema {
       // a default object so it displays properly
       if (
         Object.keys(data).length &&
-        JSONstringify(data).match(/"default":/gi)
+        JSONStringify(data).match(/"default":/gi)
       ) {
         const defaultObject = this._createDefaultObject(data)
         joiType = joiType.default(defaultObject)
@@ -130,7 +150,7 @@ class Schema {
     return joiType
   }
 
-  _parseType(item, prop = '') {
+  _parseType(item: any, prop = ''): any {
     if (item === null || item === undefined) {
       throw new Error(`Property "${prop}" cannot be null or undefined`)
     }
@@ -154,7 +174,7 @@ class Schema {
         if (item instanceof Array) {
           return 'array'
         }
-        if (type === Object) {
+        if (type === typeof Object) {
           return 'object'
         }
         return 'object'
@@ -189,7 +209,7 @@ class Schema {
     }
   }
 
-  _parseAttrs(prop, joiType, data, callback) {
+  _parseAttrs(prop: any, joiType: any, data: any, callback: Function) {
     let item = data[prop]
     if (typeof item !== 'function') {
       for (let attr in item) {
@@ -211,8 +231,8 @@ class Schema {
     callback(joiType)
   }
 
-  _createDefaultObject(data) {
-    let defaultValue = {}
+  _createDefaultObject(data: any) {
+    let defaultValue: DefaultValue = {};
     for (let prop in data) {
       if (data[prop].hasOwnProperty('default')) {
         defaultValue[prop] = data[prop].default
@@ -226,7 +246,7 @@ class Schema {
     return defaultValue
   }
 }
-
+// TODO: this will need to be addressed.
 Schema.Types = {
   String,
   Number,
@@ -239,5 +259,3 @@ Schema.Types = {
   Any: Joi.any(),
   Mixed: Joi.any()
 }
-
-module.exports = Schema

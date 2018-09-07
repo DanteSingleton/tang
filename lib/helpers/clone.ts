@@ -1,6 +1,6 @@
 // https://jsperf.com/deep-copy-vs-json-stringify-json-parse/51
-const deepCopyObject = function (o) {
-  var r, i, l
+export default function deepCopyObject (o: any): any {
+  let r: any, i, l
   if (typeof o !== 'object') return o
   if (!o) return o
   if (o.constructor === Array) {
@@ -19,5 +19,3 @@ const deepCopyObject = function (o) {
   for (i in o) r[i] = deepCopyObject(o[i])
   return r
 }
-
-module.exports = deepCopyObject

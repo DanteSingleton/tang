@@ -1,5 +1,5 @@
 {
-  "name": "tangjs",
+  "name": "tangts",
   "version": "0.1.3",
   "description": "Tang is an Object Modeler built on top of Joi",
   "main": "./index.js",
@@ -19,6 +19,11 @@
     "microtime": "^2.1.8"
   },
   "devDependencies": {
+    "@types/microtime": "^2.1.0",
+    "@types/colors": "^1.2.1",
+    "@types/joi": "^13.4.4",
+    "@types/lodash": "^4.14.116",
+    "@types/node": "^10.9.3",
     "chai": "^4.1.2",
     "coveralls": "^3.0.2",
     "istanbul": "^1.1.0-alpha.1",
@@ -41,7 +46,8 @@
     "database",
     "odm",
     "datastore",
-    "validation"
+    "validation",
+    "typescript"
   ],
   "maintainers": [
     "Rob Taylor <roboncode@gmail.com> (https://www.linkedin.com/in/roboncode/)"

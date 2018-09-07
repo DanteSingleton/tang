@@ -1,7 +1,13 @@
-const snooze = require('./snooze')
+import { snooze } from './snooze';
+/**
+ * 
+ * @param data 
+ * @param cb 
+ * @param steps 
+ */
+export async function asyncForEach(data: any, cb: Function, steps: any[] = []) {
+  let result: any[] = []
 
-async function asyncForEach(data, cb, steps = []) {
-  let result
   steps = steps.slice()
   for (let prop in data) {
     if (data.hasOwnProperty(prop)) {
@@ -17,5 +23,3 @@ async function asyncForEach(data, cb, steps = []) {
   }
   return result
 }
-
-module.exports = asyncForEach

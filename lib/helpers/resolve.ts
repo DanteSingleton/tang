@@ -2,16 +2,16 @@ const aryIndexRx = /\[(.*?)\]/g
 
 const delimiter = '.'
 
-function isUndefined(val) {
+function isUndefined(val: any) {
   return typeof val === 'undefined'
 }
 
-function pathToArray(path = '', data) {
+function pathToArray(path: any = '', data: any) {
   if (path instanceof Array) {
     return path
   }
 
-  path = path.replace(aryIndexRx, function(m, g1) {
+  path = path.replace(aryIndexRx, function(m: any, g1: any) {
     if (g1.indexOf('"') !== -1 || g1.indexOf("'") !== -1) {
       return delimiter + g1
     }
@@ -23,11 +23,12 @@ function pathToArray(path = '', data) {
 }
 
 class Resolve {
+  rawData: any;
   constructor(data = {}) {
     this.rawData = data
   }
 
-  get(path, extract = false) {
+  get(path: string, extract = false) {
     let data = this.rawData,
       prev = data,
       arr = pathToArray(path, data),
@@ -56,7 +57,7 @@ class Resolve {
     return data
   }
 
-  set(path, value) {
+  set(path: any, value: any) {
     if (isUndefined(path)) {
       throw new Error('Resolve requires "path"')
     }
@@ -86,7 +87,7 @@ class Resolve {
     return this.rawData
   }
 
-  default(path, value) {
+  default(path: any, value: any) {
     if (isUndefined(this.get(path))) {
       this.set(path, value)
     }
@@ -102,14 +103,14 @@ class Resolve {
     }
   }
 
-  path(path) {
+  path(path: any) {
     return this.set(path, {})
   }
 }
 
-let resolve = function(data) {
+let resolve = function(data: any) {
   return new Resolve(data)
 }
 
 // Add a comment to this line
-module.exports = resolve
+export default resolve

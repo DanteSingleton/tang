@@ -1,5 +1,5 @@
-function JSONstringify(o) {
-  let cache = []
+export function JSONStringify(o: object) {
+  let cache: Array<any> = []
   let str = JSON.stringify(o, (key, value) => {
     if (typeof value === 'object' && value !== null) {
       if (cache.indexOf(value) !== -1) {
@@ -11,8 +11,6 @@ function JSONstringify(o) {
     }
     return value
   })
-  delete cache
+  // cache = ; // Leave for GC
   return str
 }
-
-module.exports = JSONstringify

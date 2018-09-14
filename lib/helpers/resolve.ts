@@ -22,7 +22,7 @@ function pathToArray(path: any = '', data: any) {
   return path.split(delimiter)
 }
 
-class Resolve {
+export class Resolve {
   rawData: any;
   constructor(data = {}) {
     this.rawData = data
@@ -108,9 +108,8 @@ class Resolve {
   }
 }
 
-let resolve = function(data: any) {
+export let resolve = (data: any) => {
   return new Resolve(data)
 }
-
 // Add a comment to this line
 export default resolve

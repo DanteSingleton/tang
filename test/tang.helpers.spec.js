@@ -1,11 +1,11 @@
 const expect = require('chai').expect
-const asyncForEach = require('../lib/helpers/asyncForEach')
-const clone = require('../lib/helpers/clone')
-const definePrivateProperty = require('../lib/helpers/definePrivateProperty')
-const difference = require('../lib/helpers/difference')
-// const getObjectKeys = require('../lib/helpers/getObjectKeys')
-const jsonStringify = require('../lib/helpers/jsonStringify')
-const resolve = require('../lib/helpers/resolve')
+const { asyncForEach } = require('../dist/helpers/asyncForEach')
+const { clone } = require('../dist/helpers/clone')
+const { definePrivateProperty } = require('../dist/helpers/definePrivateProperty')
+const { difference } = require('../dist/helpers/difference')
+// const getObjectKeys = require('../dist/helpers/getObjectKeys')
+const { JSONStringify } = require('../dist/helpers/JSONStringify')
+const { resolve } = require('../dist/helpers/resolve')
 
 describe('tang helpers', function() {
   describe('asyncForEach an array', function() {
@@ -141,7 +141,7 @@ describe('tang helpers', function() {
 
     describe('jsonStringify', function() {
       it('should convert to string', function() {
-        expect(jsonStringify(foo)).to.equal('{"message":"Hello"}')
+        expect(JSONStringify(foo)).to.equal('{"message":"Hello"}')
       })
     })
   })

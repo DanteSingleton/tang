@@ -1,5 +1,5 @@
 let expect = require('chai').expect
-let Schema = require('../lib/Schema')
+const  { Schema } = require('../dist/Schema')
 let Joi = require('joi')
 
 describe('tang schema', function() {

@@ -12,10 +12,11 @@ interface Base {
  * @param  {Object} base   Object to compare with
  * @return {Object}        Return a new object who represent the diff
  */
-export default function difference(object: object, base: Base): object {
+export function difference(object: object, base: Base): object {
   return transform(object, (result: any, value: any, key: any) => {
     if (!isEqual(value, base[key])) {
       result[key] = isObject(value) && isObject(base[key]) ? difference(value, base[key]) : value;
     }
   });
 }
+export default difference

@@ -4,7 +4,7 @@
   "description": "Tang is an Object Modeler built on top of Joi",
   "main": "./index.js",
   "types": "dist/index.d.ts",
-  "scripts": {    
+  "scripts": {
     "prepare": "npm run build",
     "build": "tsc",
     "test": "nyc --reporter=html --reporter=text mocha",

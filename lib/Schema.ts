@@ -1,4 +1,5 @@
 const Joi = require('joi')
+import {Schema as JoiSchema} from 'joi'
 import { JSONStringify } from './helpers/JSONStringify';
 require('colors')
 interface SchemaStatics {
@@ -7,7 +8,7 @@ interface SchemaStatics {
 interface SchemaComputed {
   [index: string]: Function
 }
-interface JoiSchema {
+interface ISchema {
   [index: string]: any
 }
 interface DefaultValue {
@@ -80,7 +81,7 @@ export class Schema {
     return this._joi.validate(data, options)
   }
 
-  async _parse(data: any): Promise<any> {
+  _parse(data: any): Promise<JoiSchema> {
     // check if there is a schema, if so this is a reference to a model
     if (data.schema) {
       return data.schema.joi
@@ -103,7 +104,7 @@ export class Schema {
 
     if (type === 'object') {
       // if the type is an object then loop through and get child schemas
-      let schema: JoiSchema = {}
+      let schema: ISchema = {}
 
       for (let prop in data) {
         if (data.hasOwnProperty(prop)) {

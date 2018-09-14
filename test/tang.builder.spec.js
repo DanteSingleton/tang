@@ -1,15 +1,15 @@
 const expect = require('chai').expect
-const Builder = require('../lib/Builder')
+const { Builder } = require('../dist/Builder')
+const { Model } = require('../dist/Model')
+// class Model {
+//   constructor(data) {
+//     this.data = data
+//   }
 
-class Model {
-  constructor(data) {
-    this.data = data
-  }
-
-  toObject() {
-    return this.data
-  }
-}
+//   toObject() {
+//     return this.data
+//   }
+// }
 
 class Bogus {
 }
@@ -74,7 +74,7 @@ describe('tang builder', function() {
   describe('inspect', function() {
     it('should inspect data\'s current state', async function() {
       let builder = Builder.getInstance()
-      builder.data({ name: 'John Smith' })
+        .data({ name: 'John Smith' })
         .convertTo(Model)
         .toObject()
         .inspect()
@@ -84,7 +84,7 @@ describe('tang builder', function() {
   })
 
   describe('inspect', function() {
-    it('should inspect data\'s current state', async function() {
+    it('should inspect data\'s current state 2', async function() {
       let builder = Builder.getInstance()
       let inspectCalled = false
       builder.addMethod('inspect', function (target, index, items, note = 'Inspect') {

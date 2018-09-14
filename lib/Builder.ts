@@ -4,17 +4,19 @@ import microtime from 'microtime';
 
 const padding = 35
 require('colors')
-
+interface IInstances {
+  [key: string]: Builder
+}
 export class Builder {
   // Dirty hack to remove this:any errors
   [key: string]: any
   // TODO: scope member vars
-  static _instances: any;
+  private static _instances: IInstances
   methods: {};
   isArray: boolean;
   items: any;
   queue: any[];
-  static getInstance(name = 'default') {
+  public static getInstance(name: string = 'default'): Builder {
     if (!this._instances) {
       this._instances = {}
     }
@@ -24,7 +26,7 @@ export class Builder {
     return this._instances[name]
   }
 
-  constructor() {
+  private constructor() {
     this.methods = {}
     this.isArray = false
     this.queue = [];
@@ -71,15 +73,15 @@ export class Builder {
     }
   }
   // Test
-  addMethod2(name: string, method: Function) {
-    extendClass(Builder.getInstance(), { name: method })
-  }
+  // addMethod2(name: string, method: Function) {
+  //   extendClass(Builder.getInstance(), { name: method })
+  // }
 
   // Any types until i figure out what should be expected.
-  async exec(handler: any) {
+  async build(handler: any) {
     let report: any[] = []
     let startTotalTime = microtime.now()
-    let startTime: any;
+    let startTime: any
     let items = this.items
     let item = await asyncForEach(items, async (item: any, index: any) => {
       if (this.queue.length) {
@@ -87,7 +89,6 @@ export class Builder {
           if (handler) {
             startTime = microtime.now()
           }
-          // Removed brackets from [items]
           let args = [].concat(item, index, items, message.args)
           try {
             await snooze()
@@ -97,11 +98,12 @@ export class Builder {
                 ('item[' + index + '].' + message.method + ': ').padEnd(
                   padding
                 ) +
-                (microtime.now() - startTime) * 0.001
+                  (microtime.now() - startTime) * 0.001
               )
             }
             return item
           } catch (e) {
+            // console.log(`ValidationError: ${e.message}`.bgRed)
             console.log(`ValidationError: ${e.message}`)
             return e
           }
@@ -113,8 +115,8 @@ export class Builder {
     if (handler) {
       report.push(
         'totalTime:'.padEnd(padding) +
-        (microtime.now() - startTotalTime) * 0.001 +
-        ' ms'
+          (microtime.now() - startTotalTime) * 0.001 +
+          ' ms'
       )
       handler(report.join('\n'))
     }
@@ -122,5 +124,7 @@ export class Builder {
       return this.items
     }
     return item
+
   }
 }
+export default Builder

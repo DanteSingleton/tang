@@ -25,10 +25,11 @@ interface ModelValidateOptions {
 const eventMethods: string[] = ['emit', 'off', 'on', 'once']
 let eventEmitter = new EventEmitter()
 
-export interface Model {
-
+export interface IDataObject {
+  [key: string]: any
 }
 export class Model {
+  // name: string
   isModel: boolean
   _dataSource: any;
   _schema: any;
@@ -57,8 +58,9 @@ export class Model {
   /**
    * @param { Object } input - the incoming data to validate
    */
-  constructor(data: any, schema?: Schema, options = {}) {
-    this.isModel = false
+  constructor(data: IDataObject, schema?: Schema, options = {}) {
+    // this.name = data.name
+    this.isModel = true
     if (schema) {
       schema = new Schema(schema)
 
